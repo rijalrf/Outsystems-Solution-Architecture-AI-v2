@@ -21,9 +21,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ result }) => {
 
     const entitiesCount = result?.entities?.length || 0;
     const staticEntitiesCount = result?.staticEntities?.length || 0;
-    const endpointsCount = result?.endpoints?.length || 0;
+    const consumedRestApisCount = result?.consumedRestApis?.length || 0;
     const pagesCount = result?.pages?.length || 0;
-    const totalAo = entitiesCount + staticEntitiesCount + endpointsCount + pagesCount;
+    const totalAo = entitiesCount + staticEntitiesCount + pagesCount + consumedRestApisCount;
 
     return (
         <aside className="sticky top-0 h-screen w-64 bg-slate-100/50 dark:bg-slate-800/50 border-r border-slate-200 dark:border-slate-700 p-4 hidden lg:block">
@@ -48,7 +48,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ result }) => {
                             {staticEntitiesCount > 0 && <NavLink href="#static-entities">Static Entities ({staticEntitiesCount})</NavLink>}
                             {hasAsyncProcesses && <NavLink href="#asynchronous-processes">Asynchronous Processes</NavLink>}
                             {result.thirdPartyRecommendations?.length > 0 && <NavLink href="#third-party-recommendations">Third-Party Recommendations</NavLink>}
-                            {endpointsCount > 0 && <NavLink href="#api-endpoints">API Endpoints ({endpointsCount})</NavLink>}
+                            {result.serviceActions?.length > 0 && <NavLink href="#service-actions">Service Actions</NavLink>}
+                            {consumedRestApisCount > 0 && <NavLink href="#consumed-rest-apis">Consumed REST APIs ({consumedRestApisCount})</NavLink>}
                             {result.roles?.length > 0 && <NavLink href="#roles">Roles & Permissions</NavLink>}
                             {pagesCount > 0 && <NavLink href="#pages">Pages ({pagesCount})</NavLink>}
                             {result.siteProperties?.length > 0 && <NavLink href="#site-properties">Site Properties</NavLink>}

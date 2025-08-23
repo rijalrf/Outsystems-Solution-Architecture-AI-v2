@@ -31,11 +31,24 @@ const getResponseSchema = () => ({
                     required: ["name", "description", "modules"],
                     properties: {
                         name: { type: Type.STRING, description: "The name of the layer: 'End-User', 'Core', or 'Foundation'."},
-                        description: { type: Type.STRING, description: "A brief description of the layer's purpose."},
+                        description: { type: Type.STRING, description: "A brief description of the layer's purpose according to OutSystems best practices."},
                         modules: { 
                             type: Type.ARRAY,
-                            description: "List of module names belonging to this layer. Names should use standard OutSystems suffixes (e.g., _UI, _CS, _BL, _LIB, _IS, _API).",
-                            items: { type: Type.STRING }
+                            description: "List of modules belonging to this layer. Each module should have a name and a specific description.",
+                            items: { 
+                                type: Type.OBJECT,
+                                required: ["name", "description"],
+                                properties: {
+                                    name: { 
+                                        type: Type.STRING, 
+                                        description: "The name of the module. Should use standard OutSystems suffixes (e.g., _UI, _CS, _BL)."
+                                    },
+                                    description: {
+                                        type: Type.STRING,
+                                        description: "A brief description of this specific module's purpose and responsibilities."
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -156,44 +169,50 @@ const getResponseSchema = () => ({
             }
         }
     },
-    endpoints: {
+    serviceActions: {
       type: Type.ARRAY,
-      description: "List of REST API service endpoints that the application might consume or expose.",
+      description: "List of reusable server-side logic units (Service Actions). These are not directly exposed as REST APIs but are callable from other modules. They do not count as Application Objects.",
+      items: {
+        type: Type.OBJECT,
+        required: ["name", "description", "inputs", "outputs"],
+        properties: {
+          name: {
+            type: Type.STRING,
+            description: "A descriptive name for the Service Action, e.g., 'GetProductDetails', 'SubmitOrder'."
+          },
+          description: {
+            type: Type.STRING,
+            description: "A brief description of what the Service Action does."
+          },
+          inputs: {
+            type: Type.ARRAY,
+            description: "List of input parameters, e.g., 'ProductId (Integer)', 'OrderData (Record)'.",
+            items: { type: Type.STRING }
+          },
+          outputs: {
+            type: Type.ARRAY,
+            description: "List of output parameters, e.g., 'Product (Record)', 'IsSuccess (Boolean)'.",
+            items: { type: Type.STRING }
+          }
+        },
+      },
+    },
+     consumedRestApis: {
+      type: Type.ARRAY,
+      description: "OPTIONAL: List of external REST APIs the application will consume. Each consumed REST API method counts as an Application Object. Only include this if the design implies integration with external services (e.g., payment gateways, mapping services).",
       items: {
         type: Type.OBJECT,
         required: ["name", "method", "path", "parameters", "description", "requestExample", "responseExample"],
         properties: {
-          name: {
-            type: Type.STRING,
-            description: "A descriptive name for the endpoint, e.g., 'GetUserProfile'."
-          },
-          method: {
-            type: Type.STRING,
-            description: "The HTTP method, e.g., 'GET', 'POST', 'PUT', 'DELETE'."
-          },
-          path: {
-            type: Type.STRING,
-            description: "The URL path for the endpoint, e.g., '/users/{userId}'."
-          },
-          parameters: {
-            type: Type.ARRAY,
-            description: "List of parameters (path, query, or body), e.g., 'userId (integer)', 'query (string)'.",
-            items: { type: Type.STRING }
-          },
-          description: {
-            type: Type.STRING,
-            description: "A brief description of what the endpoint does."
-          },
-          requestExample: {
-            type: Type.STRING,
-            description: "A JSON string example of the request body or payload. For GET requests, use an empty string."
-          },
-          responseExample: {
-            type: Type.STRING,
-            description: "A JSON string example of a successful response body."
-          }
-        },
-      },
+          name: { type: Type.STRING, description: "A descriptive name for the consumed API method, e.g., 'ProcessStripePayment'." },
+          method: { type: Type.STRING, description: "The HTTP method, e.g., 'GET', 'POST'." },
+          path: { type: Type.STRING, description: "The full or partial URL path, e.g., 'https://api.stripe.com/v1/charges'." },
+          parameters: { type: Type.ARRAY, description: "List of parameters (path, query, or body).", items: { type: Type.STRING } },
+          description: { type: Type.STRING, description: "A brief description of what the API call does." },
+          requestExample: { type: Type.STRING, description: "A JSON string example of the request body. Use an empty string for GET requests." },
+          responseExample: { type: Type.STRING, description: "A JSON string example of a successful response body." }
+        }
+      }
     },
     roles: {
       type: Type.ARRAY,
@@ -263,7 +282,7 @@ const getResponseSchema = () => ({
         }
     },
   },
-  required: ["businessSummary", "architecture", "entities", "relationships", "staticEntities", "endpoints", "roles", "pages", "siteProperties"],
+  required: ["businessSummary", "architecture", "entities", "relationships", "staticEntities", "serviceActions", "roles", "pages", "siteProperties"],
 });
 
 export const analyzePdfForOutsystems = async (pdfFile: File): Promise<AnalysisResult> => {
@@ -278,25 +297,24 @@ export const analyzePdfForOutsystems = async (pdfFile: File): Promise<AnalysisRe
       Your analysis MUST strictly adhere to the principles, best practices, and patterns outlined in the official OutSystems documentation, which serves as your primary knowledge base. Refer to these sources:
       - Architecture Canvas: https://success.outsystems.com/documentation/11/app_architecture/designing_the_architecture_of_your_outsystems_applications/the_architecture_canvas/
       - Module Naming Conventions: https://www.outsystems.com/forums/discussion/59771/cheat-sheet-outsystems-module-naming-convention/
-      - General Best Practices: https://success.outsystems.com/documentation/11/onboarding_developers/outsystems_platform_best_practices/
-      - Timers: https://success.outsystems.com/documentation/11/building_apps/using_timers/
-      - BPT (Processes): https://success.outsystems.com/documentation/11/building_apps/using_processes_bpt/
+      - Service Actions: https://success.outsystems.com/documentation/outsystems_developer_cloud/app_architecture/service_actions/
+      - Consuming REST APIs: https://success.outsystems.com/documentation/11/integration_with_external_systems/rest/consume_rest_apis/
+      - Application Objects (AO): https://success.outsystems.com/support/licensing/application_objects/
 
-      Generate a response that precisely follows the provided JSON schema, ensuring every component is thoughtfully placed and defined according to these expert principles.
+      Generate a response that precisely follows the provided JSON schema.
 
       - **Business Summary**: A high-level summary of the application's purpose.
-      - **Architecture Canvas**: Decompose the application into a 3-Layer Canvas (End-User, Core, Foundation). Your categorization must be justified by OutSystems principles (e.g., high cohesion, low coupling).
-        - **End-User Layer**: Should contain UI elements, screens, and client-side logic. Name modules with a \`_UI\` suffix.
-        - **Core Layer**: Should contain core business concepts, entities, and business logic. Abstract core concepts into non-reusable Core Services modules (\`_CS\`) or Business Logic modules (\`_BL\`).
-        - **Foundation Layer**: Should contain reusable, application-agnostic logic. Name modules appropriately, for example as libraries (\`_LIB\`), integration services (\`_IS\`), or core APIs (\`_API\`).
+      - **Architecture Canvas**: Decompose the application into a 3-Layer Canvas.
+        - Provide a clear description for each of the three layers and each module within them.
+        - **End-User Layer**: Contains UI elements (_UI).
+        - **Core Layer**: Contains core business concepts, entities (_CS), and business logic (_BL).
+        - **Foundation Layer**: Contains reusable, application-agnostic logic (_LIB, _IS, _API).
       - **Entities & Relationships**: Define a robust data model.
       - **Static Entities**: Correctly identify lookup data.
-      - **Asynchronous Processes (OPTIONAL)**: Based on the design, identify any need for background processing.
-        - **Timers**: Suggest Timers for scheduled batch jobs (e.g., daily data sync, sending newsletters).
-        - **BPT Processes**: Suggest BPT for long-running, stateful business processes that may involve human interaction (e.g., multi-step approval workflows).
-        - **Only include this entire 'asynchronousProcesses' section if the application design clearly implies a need for it.**
+      - **Asynchronous Processes (OPTIONAL)**: Identify any need for background processing (Timers, BPT). Only include if clearly implied by the design.
       - **Roles & Permissions**: Define roles based on the Principle of Least Privilege.
-      - **API Endpoints**: Design RESTful API endpoints following a Service-Oriented Architecture (SOA) approach.
+      - **Service Actions**: Define reusable, server-side business logic as Service Actions. These are not exposed as REST endpoints but are callable from other modules to enforce business rules consistently. **They do not count as Application Objects.**
+      - **Consumed REST APIs (OPTIONAL)**: Identify any necessary integrations with external REST APIs (e.g., calling Google Maps, Stripe for payments). List these as Consumed REST APIs, as **they count towards Application Objects.** Only include this section if external integrations are clearly needed.
       - **Pages**: List all user-facing screens.
       - **Site Properties**: Recommend site properties for configurability.
       - **Third-Party Recommendations**: Suggest integrations where appropriate.

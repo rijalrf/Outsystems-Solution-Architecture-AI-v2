@@ -71,7 +71,14 @@ export const generatePdfReport = async (result: AnalysisResult, erdElement: HTML
             doc.text(layer.name, PAGE_MARGIN, cursorY);
             cursorY += 5;
             addBodyText(layer.description, 5);
-            addBodyText(`Modules: ${layer.modules.join(', ')}`, 5);
+            if (layer.modules.length > 0) {
+                addBodyText('Modules:', 5);
+                layer.modules.forEach(module => {
+                     addBodyText(`- ${module.name}: ${module.description}`, 10);
+                });
+            } else {
+                 addBodyText('No modules identified for this layer.', 5);
+            }
             cursorY += 5;
         });
     }
@@ -168,17 +175,34 @@ export const generatePdfReport = async (result: AnalysisResult, erdElement: HTML
         });
     }
 
-    if (result.endpoints?.length > 0) {
-        addSectionHeader("API Endpoints");
-        result.endpoints.forEach(endpoint => {
+    if (result.serviceActions?.length > 0) {
+        addSectionHeader("Service Actions");
+        result.serviceActions.forEach(action => {
             addPageIfNeeded(20);
             doc.setFontSize(FONT_SIZES.H3); doc.setTextColor(51, 65, 85);
-            doc.text(endpoint.name, PAGE_MARGIN, cursorY); cursorY += 5;
-            addBodyText(endpoint.description, 5);
-            addBodyText(`Method: ${endpoint.method}`, 5);
-            addBodyText(`Path: ${endpoint.path}`, 5);
-            if(endpoint.parameters.length > 0) {
-              addBodyText(`Parameters: ${endpoint.parameters.join(', ')}`, 5);
+            doc.text(action.name, PAGE_MARGIN, cursorY); cursorY += 5;
+            addBodyText(action.description, 5);
+            if (action.inputs.length > 0) {
+              addBodyText(`Inputs: ${action.inputs.join(', ')}`, 5);
+            }
+            if (action.outputs.length > 0) {
+                addBodyText(`Outputs: ${action.outputs.join(', ')}`, 5);
+            }
+            cursorY += 5;
+        });
+    }
+
+    if (result.consumedRestApis?.length > 0) {
+        addSectionHeader("Consumed REST APIs");
+        result.consumedRestApis.forEach(api => {
+            addPageIfNeeded(20);
+            doc.setFontSize(FONT_SIZES.H3); doc.setTextColor(51, 65, 85);
+            doc.text(api.name, PAGE_MARGIN, cursorY); cursorY += 5;
+            addBodyText(api.description, 5);
+            addBodyText(`Method: ${api.method}`, 5);
+            addBodyText(`Path: ${api.path}`, 5);
+            if(api.parameters.length > 0) {
+              addBodyText(`Parameters: ${api.parameters.join(', ')}`, 5);
             }
             cursorY += 5;
         });

@@ -1,6 +1,6 @@
 
 import React, { useRef, useState } from 'react';
-import type { AnalysisResult, Endpoint, Role, Page, StaticEntity, SiteProperty, ThirdPartyServiceRecommendation, Timer, BPTProcess } from '../types';
+import type { AnalysisResult, ConsumedRestApi, Role, Page, StaticEntity, SiteProperty, ThirdPartyServiceRecommendation, Timer, BPTProcess, ServiceAction } from '../types';
 import { ERDCanvas } from './ERDCanvas';
 import { EntitiesList } from './EntitiesList';
 import { ArchitectureCanvasDisplay } from './ArchitectureCanvasDisplay';
@@ -37,6 +37,7 @@ const PageIcon = () => (
 const SettingsIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066 2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
 );
+const ServiceActionIcon = SettingsIcon; // Reuse settings icon for service actions
 const ThirdPartyIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" />
@@ -119,9 +120,9 @@ export const ResultsDisplay: React.FC<{ result: AnalysisResult }> = ({ result })
 
   const entitiesCount = result.entities?.length || 0;
   const staticEntitiesCount = result.staticEntities?.length || 0;
-  const endpointsCount = result.endpoints?.length || 0;
+  const consumedRestApisCount = result.consumedRestApis?.length || 0;
   const pagesCount = result.pages?.length || 0;
-  const totalAo = entitiesCount + staticEntitiesCount + endpointsCount + pagesCount;
+  const totalAo = entitiesCount + staticEntitiesCount + pagesCount + consumedRestApisCount;
 
   const handleExportPdf = async () => {
     if (!result) return;
@@ -190,8 +191,8 @@ export const ResultsDisplay: React.FC<{ result: AnalysisResult }> = ({ result })
                         <p className="text-xl font-bold text-slate-800 dark:text-slate-200">{staticEntitiesCount}</p>
                     </div>
                     <div className="p-3 bg-slate-100 dark:bg-slate-700 rounded-lg">
-                        <p className="text-sm font-semibold text-slate-500 dark:text-slate-400">Endpoints</p>
-                        <p className="text-xl font-bold text-slate-800 dark:text-slate-200">{endpointsCount}</p>
+                        <p className="text-sm font-semibold text-slate-500 dark:text-slate-400">Consumed REST</p>
+                        <p className="text-xl font-bold text-slate-800 dark:text-slate-200">{consumedRestApisCount}</p>
                     </div>
                     <div className="p-3 bg-slate-100 dark:bg-slate-700 rounded-lg">
                         <p className="text-sm font-semibold text-slate-500 dark:text-slate-400">Pages</p>
@@ -311,24 +312,52 @@ export const ResultsDisplay: React.FC<{ result: AnalysisResult }> = ({ result })
             </ResultCard>
         )}
 
-        {endpointsCount > 0 && (
-            <ResultCard id="api-endpoints" title={`API Endpoints (${endpointsCount})`} icon={<ApiIcon />}>
-                {result.endpoints.map((endpoint: Endpoint, index: number) => (
-                    <SectionItem key={index} title={endpoint.name}>
-                        <p className="text-sm text-slate-500 dark:text-slate-400 italic mt-1 mb-2">{endpoint.description}</p>
+        {result.serviceActions && result.serviceActions.length > 0 && (
+            <ResultCard id="service-actions" title="Service Actions" icon={<ServiceActionIcon />}>
+                {result.serviceActions.map((action: ServiceAction, index: number) => (
+                    <SectionItem key={index} title={action.name}>
+                        <p className="text-sm text-slate-500 dark:text-slate-400 italic mt-1 mb-2">{action.description}</p>
                         <div className="text-sm text-slate-600 dark:text-slate-300 space-y-2">
-                            <p><span className="font-semibold">Method:</span> <span className="font-mono bg-slate-200 dark:bg-slate-600 text-red-700 dark:text-red-400 px-1.5 py-0.5 rounded">{endpoint.method}</span></p>
-                            <p><span className="font-semibold">Path:</span> <span className="font-mono">{endpoint.path}</span></p>
-                            {endpoint.parameters.length > 0 && (
+                            {action.inputs.length > 0 && (
                                 <div>
-                                    <span className="font-semibold">Parameters:</span>
+                                    <span className="font-semibold">Inputs:</span>
                                     <ul className="list-disc list-inside ml-4">
-                                        {endpoint.parameters.map((param, i) => <li key={i}>{param}</li>)}
+                                        {action.inputs.map((param, i) => <li key={i}>{param}</li>)}
                                     </ul>
                                 </div>
                             )}
-                            {endpoint.requestExample && <CodeBlock title="Request Example" code={endpoint.requestExample} />}
-                            {endpoint.responseExample && <CodeBlock title="Response Example" code={endpoint.responseExample} />}
+                            {action.outputs.length > 0 && (
+                                <div>
+                                    <span className="font-semibold">Outputs:</span>
+                                    <ul className="list-disc list-inside ml-4">
+                                        {action.outputs.map((param, i) => <li key={i}>{param}</li>)}
+                                    </ul>
+                                </div>
+                            )}
+                        </div>
+                    </SectionItem>
+                ))}
+            </ResultCard>
+        )}
+
+        {consumedRestApisCount > 0 && (
+            <ResultCard id="consumed-rest-apis" title={`Consumed REST APIs (${consumedRestApisCount})`} icon={<ApiIcon />}>
+                {result.consumedRestApis.map((api: ConsumedRestApi, index: number) => (
+                    <SectionItem key={index} title={api.name}>
+                        <p className="text-sm text-slate-500 dark:text-slate-400 italic mt-1 mb-2">{api.description}</p>
+                        <div className="text-sm text-slate-600 dark:text-slate-300 space-y-2">
+                            <p><span className="font-semibold">Method:</span> <span className="font-mono bg-slate-200 dark:bg-slate-600 text-red-700 dark:text-red-400 px-1.5 py-0.5 rounded">{api.method}</span></p>
+                            <p><span className="font-semibold">Path:</span> <span className="font-mono">{api.path}</span></p>
+                            {api.parameters.length > 0 && (
+                                <div>
+                                    <span className="font-semibold">Parameters:</span>
+                                    <ul className="list-disc list-inside ml-4">
+                                        {api.parameters.map((param, i) => <li key={i}>{param}</li>)}
+                                    </ul>
+                                </div>
+                            )}
+                            {api.requestExample && <CodeBlock title="Request Example" code={api.requestExample} />}
+                            {api.responseExample && <CodeBlock title="Response Example" code={api.responseExample} />}
                         </div>
                     </SectionItem>
                 ))}

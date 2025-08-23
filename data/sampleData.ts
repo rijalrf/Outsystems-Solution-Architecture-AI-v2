@@ -6,18 +6,26 @@ export const sampleAnalysisResult: AnalysisResult = {
     layers: [
       {
         name: "End-User",
-        description: "Provides the user interface and core application logic.",
-        modules: ["ApparelStore_UI"]
+        description: "This layer contains all the elements the user interacts with, such as screens, UI widgets, and client-side logic. It's responsible for the presentation and user experience.",
+        modules: [
+            { name: "ApparelStore_UI", description: "Handles all user-facing screens like product listings, shopping cart, and checkout." }
+        ]
       },
       {
         name: "Core",
-        description: "Contains business logic and data for core concepts.",
-        modules: ["ProductManagement_CS", "OrderProcessing_BL"]
+        description: "This layer encapsulates the application's core business logic and data. It defines the main business concepts and rules, ensuring they are consistent and reusable across the application.",
+        modules: [
+            { name: "ProductManagement_CS", description: "Manages core product entities and provides services for creating, reading, updating, and deleting products." },
+            { name: "OrderProcessing_BL", description: "Contains the business logic for handling the entire order lifecycle, from creation to payment and fulfillment." }
+        ]
       },
       {
         name: "Foundation",
-        description: "Provides reusable, application-agnostic services.",
-        modules: ["Stripe_IS", "Authentication_LIB"]
+        description: "This layer provides reusable, application-agnostic services and components. It often includes integrations with external systems or shared libraries that can be used across multiple applications.",
+        modules: [
+            { name: "Stripe_IS", description: "Integrates with the Stripe payment gateway to handle payment processing securely." },
+            { name: "Authentication_LIB", description: "Provides a reusable library for user authentication and session management." }
+        ]
       }
     ]
   },
@@ -111,24 +119,29 @@ export const sampleAnalysisResult: AnalysisResult = {
       }
     ]
   },
-  endpoints: [
+  serviceActions: [
     {
       name: "GetProducts",
-      method: "GET",
-      path: "/api/products",
-      parameters: ["search (text)", "sortBy (text)"],
       description: "Retrieves a list of available products, with optional search and sorting.",
-      requestExample: "",
-      responseExample: "[{\"id\": 1, \"name\": \"Classic T-Shirt\", \"price\": 19.99}]"
+      inputs: ["search (text)", "sortBy (text)"],
+      outputs: ["ProductList (List of Product Record)"]
     },
     {
       name: "CreateOrder",
-      method: "POST",
-      path: "/api/orders",
-      parameters: ["items (array)"],
       description: "Creates a new order from a list of items in the cart.",
-      requestExample: "{\"userId\": 123, \"items\": [{\"productId\": 1, \"quantity\": 2}]}",
-      responseExample: "{\"orderId\": 987, \"status\": \"Pending\", \"total\": 39.98}"
+      inputs: ["userId (Long Integer)", "items (List of OrderItem Record)"],
+      outputs: ["orderId (Long Integer)", "isSuccess (Boolean)"]
+    }
+  ],
+  consumedRestApis: [
+    {
+        name: "ProcessPayment",
+        method: "POST",
+        path: "https://api.stripe.com/v1/charges",
+        parameters: ["amount (integer)", "currency (string)", "source (string)", "description (string)"],
+        description: "Consumes the Stripe API to process a credit card payment for an order.",
+        requestExample: "{\"amount\": 3998, \"currency\": \"usd\", \"source\": \"tok_visa\", \"description\": \"Charge for order 987\"}",
+        responseExample: "{\"id\": \"ch_123...\", \"status\": \"succeeded\"}"
     }
   ],
   roles: [

@@ -18,7 +18,14 @@ export interface Relationship {
   description: string;
 }
 
-export interface Endpoint {
+export interface ServiceAction {
+  name: string;
+  description: string;
+  inputs: string[];
+  outputs: string[];
+}
+
+export interface ConsumedRestApi {
   name: string;
   method: string;
   path: string;
@@ -53,10 +60,15 @@ export interface SiteProperty {
   description: string;
 }
 
+export interface Module {
+  name: string;
+  description: string;
+}
+
 export interface ArchitectureLayer {
     name: string; // e.g., "End-User", "Core", "Foundation"
     description: string;
-    modules: string[]; // e.g., ["ProductScreen_UI", "UserManagement_CS"]
+    modules: Module[]; // e.g., [{name: "ProductScreen_UI", description: "Handles product display"}]
 }
 
 export interface Architecture {
@@ -93,7 +105,8 @@ export interface AnalysisResult {
   relationships: Relationship[];
   staticEntities: StaticEntity[];
   roles: Role[];
-  endpoints: Endpoint[];
+  serviceActions: ServiceAction[];
+  consumedRestApis?: ConsumedRestApi[];
   pages: Page[];
   siteProperties: SiteProperty[];
   thirdPartyRecommendations?: ThirdPartyServiceRecommendation[];

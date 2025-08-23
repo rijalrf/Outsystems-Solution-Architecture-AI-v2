@@ -11,6 +11,7 @@ import { ErrorDisplay } from './components/ErrorDisplay';
 import { Sidebar } from './components/Sidebar';
 import { Tooltip } from './components/Tooltip';
 import { DocumentationPage } from './components/DocumentationPage';
+import { sampleAnalysisResult } from './data/sampleData';
 
 type View = 'app' | 'docs';
 
@@ -70,6 +71,17 @@ const App: React.FC = () => {
     }
   }, [file]);
 
+  const handleLoadSampleData = () => {
+    setError(null);
+    setFile(null);
+    setIsLoading(false);
+    setAnalysisResult(sampleAnalysisResult);
+    // Scroll to results smoothly
+    setTimeout(() => {
+        document.getElementById('analysis-results-container')?.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
+  };
+
   const tooltipContent = (
     <div className="text-left">
         <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100 mb-1">How to Use</h3>
@@ -99,9 +111,18 @@ const App: React.FC = () => {
           <main className="flex-grow p-4 md:p-8">
               <div className="max-w-4xl mx-auto">
                   <div className="mt-8 bg-white dark:bg-slate-800 p-6 md:p-8 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700">
-                      <div className="flex items-center gap-2 mb-2">
-                        <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">Upload Figma PDF</h2>
-                        <Tooltip content={tooltipContent} />
+                      <div className="flex items-center justify-between gap-2 mb-2">
+                        <div className="flex items-center gap-2">
+                          <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">Upload Figma PDF</h2>
+                          <Tooltip content={tooltipContent} />
+                        </div>
+                        <button
+                          onClick={handleLoadSampleData}
+                          className="px-3 py-1.5 text-xs font-semibold text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-700 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors"
+                          title="Load sample data for development"
+                        >
+                          Load Sample Data
+                        </button>
                       </div>
                       <p className="text-slate-500 dark:text-slate-400 mb-6">Select a PDF file exported from Figma to begin the analysis.</p>
                       <FileUploader 
@@ -117,7 +138,7 @@ const App: React.FC = () => {
                   
                   {!isLoading && !analysisResult && !error && <Welcome />}
                   
-                  {analysisResult && <ResultsDisplay result={analysisResult} />}
+                  {analysisResult && <div id="analysis-results-container"><ResultsDisplay result={analysisResult} /></div>}
               </div>
           </main>
         </div>
