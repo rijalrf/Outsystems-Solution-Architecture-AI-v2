@@ -1,13 +1,15 @@
 
+
 import React, { useState, useRef } from 'react';
 
 interface FileUploaderProps {
   onFileSelect: (file: File) => void;
   onAnalyze: () => void;
   isLoading: boolean;
+  isApiKeySet: boolean;
 }
 
-export const FileUploader: React.FC<FileUploaderProps> = ({ onFileSelect, onAnalyze, isLoading }) => {
+export const FileUploader: React.FC<FileUploaderProps> = ({ onFileSelect, onAnalyze, isLoading, isApiKeySet }) => {
   const [fileName, setFileName] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -47,7 +49,8 @@ export const FileUploader: React.FC<FileUploaderProps> = ({ onFileSelect, onAnal
           <div className="flex-grow"></div>
           <button
             onClick={onAnalyze}
-            disabled={!fileName || isLoading}
+            disabled={!fileName || isLoading || !isApiKeySet}
+            title={!isApiKeySet ? "Please set your Gemini API key first" : "Analyze the selected PDF file"}
             className="w-full sm:w-auto flex-shrink-0 px-6 py-3 text-sm font-semibold text-white bg-red-600 rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-all duration-200 transform hover:scale-105 disabled:bg-red-400 disabled:cursor-not-allowed disabled:scale-100"
           >
             {isLoading ? 'Analyzing...' : 'Analyze Now'}

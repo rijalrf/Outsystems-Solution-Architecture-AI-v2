@@ -1,4 +1,5 @@
 
+
 import { GoogleGenAI, Type } from "@google/genai";
 import type { AnalysisResult } from '../types';
 
@@ -178,7 +179,7 @@ const getResponseSchema = () => ({
         properties: {
           name: {
             type: Type.STRING,
-            description: "A descriptive name for the Service Action, e.g., 'GetProductDetails', 'SubmitOrder'."
+            description: "A descriptive name for the Service Action that MUST start with a verb, following OutSystems best practices. E.g., 'GetProductDetails', 'SubmitOrder'."
           },
           description: {
             type: Type.STRING,
@@ -285,8 +286,8 @@ const getResponseSchema = () => ({
   required: ["businessSummary", "architecture", "entities", "relationships", "staticEntities", "serviceActions", "roles", "pages", "siteProperties"],
 });
 
-export const analyzePdfForOutsystems = async (pdfFile: File): Promise<AnalysisResult> => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+export const analyzePdfForOutsystems = async (pdfFile: File, apiKey: string): Promise<AnalysisResult> => {
+  const ai = new GoogleGenAI({ apiKey });
 
   const pdfPart = await fileToGenerativePart(pdfFile);
 
@@ -313,7 +314,7 @@ export const analyzePdfForOutsystems = async (pdfFile: File): Promise<AnalysisRe
       - **Static Entities**: Correctly identify lookup data.
       - **Asynchronous Processes (OPTIONAL)**: Identify any need for background processing (Timers, BPT). Only include if clearly implied by the design.
       - **Roles & Permissions**: Define roles based on the Principle of Least Privilege.
-      - **Service Actions**: Define reusable, server-side business logic as Service Actions. These are not exposed as REST endpoints but are callable from other modules to enforce business rules consistently. **They do not count as Application Objects.**
+      - **Service Actions**: Define reusable, server-side business logic as Service Actions. Their names MUST start with a verb (e.g., 'GetUserDetails', 'SubmitOrder'). These are not exposed as REST endpoints but are callable from other modules to enforce business rules consistently. **They do not count as Application Objects.**
       - **Consumed REST APIs (OPTIONAL)**: Identify any necessary integrations with external REST APIs (e.g., calling Google Maps, Stripe for payments). List these as Consumed REST APIs, as **they count towards Application Objects.** Only include this section if external integrations are clearly needed.
       - **Pages**: List all user-facing screens.
       - **Site Properties**: Recommend site properties for configurability.

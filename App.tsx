@@ -1,4 +1,5 @@
 
+
 import React, { useState, useCallback, useEffect } from 'react';
 import { Header } from './components/Header';
 import { FileUploader } from './components/FileUploader';
@@ -11,7 +12,7 @@ import { ErrorDisplay } from './components/ErrorDisplay';
 import { Sidebar } from './components/Sidebar';
 import { Tooltip } from './components/Tooltip';
 import { DocumentationPage } from './components/DocumentationPage';
-import { sampleAnalysisResult } from './data/sampleData';
+import { ApiKeyModal } from './components/ApiKeyModal';
 
 type View = 'app' | 'docs';
 
@@ -21,6 +22,8 @@ const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [view, setView] = useState<View>('app');
+  const [apiKey, setApiKey] = useState<string | null>(() => localStorage.getItem('gemini-api-key'));
+  const [isApiKeyModalOpen, setIsApiKeyModalOpen] = useState<boolean>(!localStorage.getItem('gemini-api-key'));
 
   const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
     if (typeof window !== 'undefined') {
@@ -49,8 +52,19 @@ const App: React.FC = () => {
     setAnalysisResult(null);
     setError(null);
   };
+  
+  const handleSaveApiKey = (key: string) => {
+    localStorage.setItem('gemini-api-key', key);
+    setApiKey(key);
+    setIsApiKeyModalOpen(false);
+  };
 
   const handleAnalyze = useCallback(async () => {
+    if (!apiKey) {
+      setError('Please set your Gemini API key first.');
+      setIsApiKeyModalOpen(true);
+      return;
+    }
     if (!file) {
       setError('Please select a PDF file first.');
       return;
@@ -61,7 +75,7 @@ const App: React.FC = () => {
     setAnalysisResult(null);
 
     try {
-      const result = await analyzePdfForOutsystems(file);
+      const result = await analyzePdfForOutsystems(file, apiKey);
       setAnalysisResult(result);
     } catch (err) {
       console.error(err);
@@ -69,18 +83,7 @@ const App: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [file]);
-
-  const handleLoadSampleData = () => {
-    setError(null);
-    setFile(null);
-    setIsLoading(false);
-    setAnalysisResult(sampleAnalysisResult);
-    // Scroll to results smoothly
-    setTimeout(() => {
-        document.getElementById('analysis-results-container')?.scrollIntoView({ behavior: 'smooth' });
-    }, 100);
-  };
+  }, [file, apiKey]);
 
   const tooltipContent = (
     <div className="text-left">
@@ -97,10 +100,18 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-200 font-sans transition-colors duration-300">
+      {isApiKeyModalOpen && (
+        <ApiKeyModal 
+          onClose={() => setIsApiKeyModalOpen(false)}
+          onSave={handleSaveApiKey}
+          currentKey={apiKey}
+        />
+      )}
       <Header 
         isDarkMode={isDarkMode} 
         toggleDarkMode={toggleDarkMode}
         onDocsClick={() => setView('docs')}
+        onApiKeyClick={() => setIsApiKeyModalOpen(true)}
       />
       
       {view === 'docs' ? (
@@ -116,19 +127,13 @@ const App: React.FC = () => {
                           <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">Upload Figma PDF</h2>
                           <Tooltip content={tooltipContent} />
                         </div>
-                        <button
-                          onClick={handleLoadSampleData}
-                          className="px-3 py-1.5 text-xs font-semibold text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-700 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors"
-                          title="Load sample data for development"
-                        >
-                          Load Sample Data
-                        </button>
                       </div>
                       <p className="text-slate-500 dark:text-slate-400 mb-6">Select a PDF file exported from Figma to begin the analysis.</p>
                       <FileUploader 
                         onFileSelect={handleFileSelect} 
                         onAnalyze={handleAnalyze} 
                         isLoading={isLoading}
+                        isApiKeySet={!!apiKey}
                       />
                   </div>
 

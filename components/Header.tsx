@@ -1,13 +1,15 @@
 
+
 import React from 'react';
 
 interface HeaderProps {
     isDarkMode: boolean;
     toggleDarkMode: () => void;
     onDocsClick: () => void;
+    onApiKeyClick: () => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ isDarkMode, toggleDarkMode, onDocsClick }) => {
+export const Header: React.FC<HeaderProps> = ({ isDarkMode, toggleDarkMode, onDocsClick, onApiKeyClick }) => {
   return (
     <header className="bg-white dark:bg-slate-800 shadow-md border-b border-slate-200 dark:border-slate-700 sticky top-0 z-30">
       <div className="container mx-auto px-4 md:px-8 py-3 flex items-center justify-between">
@@ -29,6 +31,14 @@ export const Header: React.FC<HeaderProps> = ({ isDarkMode, toggleDarkMode, onDo
             title="Documentation"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
+          </button>
+           <button
+            onClick={onApiKeyClick}
+            className="p-2 rounded-full text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 focus:ring-offset-slate-50 dark:focus:ring-offset-slate-800 transition-colors"
+            aria-label="Manage API Key"
+            title="Manage API Key"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 7h2a2 2 0 012 2v10a2 2 0 01-2 2h-4a2 2 0 01-2-2V9a2 2 0 012-2h2m-4 0V5a2 2 0 012-2h2a2 2 0 012 2v2m-6 0h6" /></svg>
           </button>
           <button
             onClick={toggleDarkMode}
