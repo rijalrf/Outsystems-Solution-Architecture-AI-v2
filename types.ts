@@ -1,3 +1,4 @@
+
 export interface Attribute {
   name: string;
   dataType: string;
@@ -98,6 +99,11 @@ export interface AsynchronousProcesses {
   bptProcesses?: BPTProcess[];
 }
 
+export interface PluginRecommendation {
+  name: string;
+  description: string;
+}
+
 export interface AnalysisResult {
   businessSummary: string;
   architecture?: Architecture;
@@ -111,4 +117,10 @@ export interface AnalysisResult {
   siteProperties: SiteProperty[];
   thirdPartyRecommendations?: ThirdPartyServiceRecommendation[];
   asynchronousProcesses?: AsynchronousProcesses;
+  pluginRecommendations?: PluginRecommendation[];
+}
+
+export interface ChatMessage {
+  role: 'user' | 'model';
+  text: string;
 }

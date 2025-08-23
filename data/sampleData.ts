@@ -1,3 +1,4 @@
+
 import type { AnalysisResult } from '../types';
 
 export const sampleAnalysisResult: AnalysisResult = {
@@ -23,6 +24,7 @@ export const sampleAnalysisResult: AnalysisResult = {
         name: "Foundation",
         description: "This layer provides reusable, application-agnostic services and components. It often includes integrations with external systems or shared libraries that can be used across multiple applications.",
         modules: [
+            { name: "ApparelStore_Th", description: "Contains the base theme and styles for the entire application, ensuring a consistent look and feel." },
             { name: "Stripe_IS", description: "Integrates with the Stripe payment gateway to handle payment processing securely." },
             { name: "Authentication_LIB", description: "Provides a reusable library for user authentication and session management." }
         ]
@@ -169,6 +171,12 @@ export const sampleAnalysisResult: AnalysisResult = {
         serviceName: "Amazon S3",
         useCase: "Storing high-resolution product images and user-uploaded custom designs.",
         recommendation: "Amazon S3 is a scalable and cost-effective solution for storing and serving large amounts of static files like images, ensuring fast load times for customers."
+    }
+  ],
+  pluginRecommendations: [
+    {
+      name: "Ultimate PDF",
+      description: "Recommended for generating and downloading PDF reports, such as order invoices or sales summaries, which is a common requirement for an e-commerce platform."
     }
   ]
 };

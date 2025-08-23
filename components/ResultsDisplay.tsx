@@ -1,6 +1,6 @@
 
 import React, { useRef, useState } from 'react';
-import type { AnalysisResult, ConsumedRestApi, Role, Page, StaticEntity, SiteProperty, ThirdPartyServiceRecommendation, Timer, BPTProcess, ServiceAction } from '../types';
+import type { AnalysisResult, ConsumedRestApi, Role, Page, StaticEntity, SiteProperty, ThirdPartyServiceRecommendation, Timer, BPTProcess, ServiceAction, PluginRecommendation } from '../types';
 import { ERDCanvas } from './ERDCanvas';
 import { EntitiesList } from './EntitiesList';
 import { ArchitectureCanvasDisplay } from './ArchitectureCanvasDisplay';
@@ -46,6 +46,11 @@ const ThirdPartyIcon = () => (
 const AsyncIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+);
+const ForgeIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
     </svg>
 );
 
@@ -296,6 +301,16 @@ export const ResultsDisplay: React.FC<{ result: AnalysisResult }> = ({ result })
                         ))}
                     </div>
                 )}
+            </ResultCard>
+        )}
+
+        {result.pluginRecommendations && result.pluginRecommendations.length > 0 && (
+            <ResultCard id="plugin-recommendations" title="Plugin Recommendations" icon={<ForgeIcon />}>
+                {result.pluginRecommendations.map((rec: PluginRecommendation, index: number) => (
+                    <SectionItem key={index} title={rec.name}>
+                        <p className="text-sm text-slate-500 dark:text-slate-400 italic mt-1">{rec.description}</p>
+                    </SectionItem>
+                ))}
             </ResultCard>
         )}
 

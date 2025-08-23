@@ -1,3 +1,4 @@
+
 import jspdf from 'jspdf';
 import html2canvas from 'html2canvas';
 import type { AnalysisResult } from '../types';
@@ -162,6 +163,17 @@ export const generatePdfReport = async (result: AnalysisResult, erdElement: HTML
             });
        }
    }
+
+    if(result.pluginRecommendations?.length > 0) {
+        addSectionHeader("Plugin Recommendations");
+        result.pluginRecommendations.forEach(rec => {
+            addPageIfNeeded(15);
+            doc.setFontSize(FONT_SIZES.H3); doc.setTextColor(51, 65, 85);
+            doc.text(rec.name, PAGE_MARGIN, cursorY); cursorY += 5;
+            addBodyText(rec.description, 5);
+            cursorY += 5;
+        });
+    }
 
     if(result.thirdPartyRecommendations?.length > 0) {
         addSectionHeader("Third-Party Recommendations");

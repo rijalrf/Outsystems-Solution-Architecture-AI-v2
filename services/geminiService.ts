@@ -282,6 +282,18 @@ const getResponseSchema = () => ({
             }
         }
     },
+    pluginRecommendations: {
+      type: Type.ARRAY,
+      description: "OPTIONAL: List of recommended OutSystems Forge plugins. Only include if the design implies a need that a common Forge component can solve (e.g., generating PDFs, advanced charts, special UI interactions).",
+      items: {
+          type: Type.OBJECT,
+          required: ["name", "description"],
+          properties: {
+              name: { type: Type.STRING, description: "The official name of the plugin on the OutSystems Forge, e.g., 'Ultimate PDF'." },
+              description: { type: Type.STRING, description: "A brief description of why this plugin is recommended for the current application's needs." }
+          }
+      }
+    },
   },
   required: ["businessSummary", "architecture", "entities", "relationships", "staticEntities", "serviceActions", "roles", "pages", "siteProperties"],
 });
@@ -301,6 +313,7 @@ export const analyzePdfForOutsystems = async (pdfFile: File, apiKey: string): Pr
       - Service Actions: https://success.outsystems.com/documentation/outsystems_developer_cloud/app_architecture/service_actions/
       - Consuming REST APIs: https://success.outsystems.com/documentation/11/integration_with_external_systems/rest/consume_rest_apis/
       - Application Objects (AO): https://success.outsystems.com/support/licensing/application_objects/
+      - OutSystems Forge: https://www.outsystems.com/forge/
 
       Generate a response that precisely follows the provided JSON schema.
 
@@ -309,7 +322,7 @@ export const analyzePdfForOutsystems = async (pdfFile: File, apiKey: string): Pr
         - Provide a clear description for each of the three layers and each module within them.
         - **End-User Layer**: Contains UI elements (_UI).
         - **Core Layer**: Contains core business concepts, entities (_CS), and business logic (_BL).
-        - **Foundation Layer**: Contains reusable, application-agnostic logic (_LIB, _IS, _API).
+        - **Foundation Layer**: Contains reusable, application-agnostic logic (_LIB, _IS, _API). **Crucially, this layer MUST always include a dedicated theme module for the application's styles (e.g., AppName_Th), as this is a fundamental OutSystems best practice.**
       - **Entities & Relationships**: Define a robust data model.
       - **Static Entities**: Correctly identify lookup data.
       - **Asynchronous Processes (OPTIONAL)**: Identify any need for background processing (Timers, BPT). Only include if clearly implied by the design.
@@ -319,6 +332,7 @@ export const analyzePdfForOutsystems = async (pdfFile: File, apiKey: string): Pr
       - **Pages**: List all user-facing screens.
       - **Site Properties**: Recommend site properties for configurability.
       - **Third-Party Recommendations**: Suggest integrations where appropriate.
+      - **Plugin Recommendations (OPTIONAL)**: Based on the application's needs, recommend relevant and popular plugins from the OutSystems Forge. For example, if the design shows PDF reports, recommend 'Ultimate PDF'. For each recommendation, provide its name and a description of why it's useful.
     `
   };
 

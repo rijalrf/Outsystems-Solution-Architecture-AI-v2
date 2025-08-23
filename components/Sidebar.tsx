@@ -47,6 +47,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ result }) => {
                             {entitiesCount > 0 && <NavLink href="#entities">Entities ({entitiesCount})</NavLink>}
                             {staticEntitiesCount > 0 && <NavLink href="#static-entities">Static Entities ({staticEntitiesCount})</NavLink>}
                             {hasAsyncProcesses && <NavLink href="#asynchronous-processes">Asynchronous Processes</NavLink>}
+                            {result.pluginRecommendations?.length > 0 && <NavLink href="#plugin-recommendations">Plugin Recommendations</NavLink>}
                             {result.thirdPartyRecommendations?.length > 0 && <NavLink href="#third-party-recommendations">Third-Party Recommendations</NavLink>}
                             {result.serviceActions?.length > 0 && <NavLink href="#service-actions">Service Actions</NavLink>}
                             {consumedRestApisCount > 0 && <NavLink href="#consumed-rest-apis">Consumed REST APIs ({consumedRestApisCount})</NavLink>}
