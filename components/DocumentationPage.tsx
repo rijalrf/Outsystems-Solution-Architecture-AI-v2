@@ -66,7 +66,8 @@ export const DocumentationPage: React.FC<{ onBack: () => void }> = ({ onBack }) 
                         <FeatureItem title="Static Entities">Lookup data or enumerations, like order statuses or user types.</FeatureItem>
                         <FeatureItem title="Asynchronous Processes">Recommendations for background processes (Timers and BPT) if needed.</FeatureItem>
                         <FeatureItem title="Third-Party Recommendations">Suggestions for external services like payment gateways or cloud storage.</FeatureItem>
-                        <FeatureItem title="API Endpoints">A list of proposed REST API endpoints for your application.</FeatureItem>
+                        <FeatureItem title="Service Actions">Reusable, server-side business logic that is not exposed as REST endpoints and does not count towards Application Objects (AO).</FeatureItem>
+                        <FeatureItem title="Consumed REST APIs">Identifies necessary integrations with external REST APIs (e.g., Google Maps, Stripe), which count towards Application Objects (AO).</FeatureItem>
                         <FeatureItem title="Roles & Permissions">User roles for managing permissions.</FeatureItem>
                         <FeatureItem title="Pages">A list of all identified screens or pages.</FeatureItem>
                         <FeatureItem title="Site Properties">Global, configurable variables for your application.</FeatureItem>

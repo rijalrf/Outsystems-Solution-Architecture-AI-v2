@@ -4,7 +4,7 @@
 
 This is a web-based tool designed to accelerate the application design and architecture phase for OutSystems developers. By uploading a multi-page PDF exported from a design tool like Figma, this application uses the Google Gemini API to analyze the visual and textual content and generate a comprehensive solution architecture blueprint.
 
-The generated blueprint is tailored to OutSystems best practices, providing a structured starting point that includes data models, architecture layers, user roles, API endpoints, and more.
+The generated blueprint is tailored to OutSystems best practices, providing a structured starting point that includes data models, architecture layers, user roles, service actions, consumed APIs, and more.
 
 ## ✨ Features
 
@@ -16,9 +16,11 @@ The generated blueprint is tailored to OutSystems best practices, providing a st
   - Entities (with attributes and keys)
   - Static Entities (with records)
   - Roles & Permissions
-  - API Endpoints (with examples)
+  - Service Actions (internal, non-AO logic)
+  - Consumed REST APIs (external integrations that count as AO)
   - Pages/Screens
   - Site Properties
+- **Application Object (AO) Estimation**: Provides an estimated AO count based on the generated components to help with licensing considerations.
 - **Asynchronous Process Recommendations**: Suggests Timers and BPT processes for background tasks and workflows if detected in the design.
 - **Third-Party Service Recommendations**: Suggests external services (like Stripe for payments or AWS S3 for storage) based on application needs.
 - **Export to PDF**: Compiles the entire analysis into a professionally formatted PDF report.
