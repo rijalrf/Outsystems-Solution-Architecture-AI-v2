@@ -1,0 +1,157 @@
+
+{
+    "app": {
+        "title": "OutSystems Solution Architecture"
+    },
+    "header": {
+        "apiKey": "Kelola Kunci API",
+        "docs": "Dokumentasi"
+    },
+     "apiKeyModal": {
+        "title": "Masukkan Kunci API Google Gemini Anda",
+        "description": "Untuk menggunakan aplikasi ini, Anda perlu menyediakan kunci API Google Gemini Anda sendiri. Anda bisa mendapatkan kunci Anda dari Google AI Studio.",
+        "placeholder": "Tempelkan kunci API Anda di sini",
+        "save": "Simpan Kunci",
+        "error": "Kunci API yang valid diperlukan untuk melakukan analisis."
+    },
+    "docsPage": {
+        "title": "Dokumentasi",
+        "backButton": "Kembali ke Aplikasi",
+        "overview": {
+            "title": "Gambaran Umum",
+            "p1": "Ini adalah alat berbasis web yang dirancang untuk mempercepat fase desain dan arsitektur aplikasi bagi pengembang OutSystems. Dengan mengunggah PDF multi-halaman yang diekspor dari alat desain seperti Figma, aplikasi ini menggunakan Google Gemini API untuk menganalisis konten visual dan tekstual dan menghasilkan cetak biru arsitektur solusi yang komprehensif."
+        },
+        "howToUse": {
+            "title": "Cara Menggunakan",
+            "figma": {
+                "title": "1. Mengekspor dari Figma",
+                "p1": "Untuk hasil analisis terbaik, Anda harus mengekspor desain Anda dari Figma sebagai satu file PDF multi-halaman.",
+                "step1": "Di Figma, pilih semua frame yang ingin Anda sertakan dalam analisis.",
+                "step2": "Buka menu utama: File > Export frames to PDF...",
+                "step3": "Ini akan menghasilkan satu file PDF dengan setiap frame sebagai halaman terpisah.",
+                "step4": "Simpan file PDF yang terkonsolidasi tersebut ke komputer Anda."
+            },
+            "apiKey": {
+                "title": "2. Mengatur Kunci API Anda",
+                "p1": "Aplikasi ini memerlukan kunci API Google Gemini untuk berfungsi. Saat pertama kali membuka aplikasi, sebuah pop-up akan muncul meminta kunci API Anda. Tempelkan kunci Anda ke kolom input dan klik \"Simpan\". Kunci akan disimpan di penyimpanan lokal peramban Anda untuk kunjungan berikutnya. Anda dapat memperbarui kunci Anda kapan saja dengan mengklik ikon kunci di header."
+            },
+            "analyze": {
+                "title": "3. Menganalisis Desain Anda",
+                "step1": "Klik tombol \"Pilih File PDF\" dan pilih PDF yang Anda ekspor dari Figma.",
+                "step2": "Klik tombol \"Analisis Sekarang\".",
+                "step3": "Tunggu hingga analisis selesai. Cetak biru arsitektur lengkap akan ditampilkan."
+            }
+        },
+        "features": {
+            "title": "Fitur & Bagian Analisis",
+            "p1": "AI menghasilkan laporan terperinci yang dipecah menjadi beberapa bagian berikut:",
+            "bizSummary": "Ringkasan tingkat tinggi tentang tujuan aplikasi.",
+            "architecture": "Mengkategorikan modul ke dalam 3-Layer Canvas OutSystems (End-User, Core, Foundation).",
+            "erd": "Diagram visual interaktif dari model data Anda.",
+            "entities": "Tampilan tabel terperinci dari semua entitas data dan atributnya.",
+            "staticEntities": "Data pencarian atau enumerasi, seperti status pesanan atau tipe pengguna.",
+            "async": "Rekomendasi untuk proses latar belakang (Timer dan BPT) jika diperlukan.",
+            "thirdParty": "Saran untuk layanan eksternal seperti gateway pembayaran atau penyimpanan cloud.",
+            "api": "Daftar endpoint REST API yang diusulkan untuk aplikasi Anda.",
+            "roles": "Peran pengguna untuk mengelola izin.",
+            "pages": "Daftar semua layar atau halaman yang teridentifikasi.",
+            "siteProperties": "Variabel global yang dapat dikonfigurasi untuk aplikasi Anda.",
+            "export": "Seluruh laporan dapat diekspor sebagai PDF yang diformat secara profesional, dan ERD dapat diekspor sebagai PNG."
+        }
+    },
+    "docs": {
+        "title": "Cara Menggunakan",
+        "description": "Untuk hasil analisis terbaik, silakan ekspor desain Anda dari Figma sebagai satu file PDF multi-halaman.",
+        "step1": "Di Figma, pilih semua frame yang ingin Anda sertakan dalam analisis.",
+        "step2": {
+            "text": "Buka menu utama:",
+            "command": "File > Export frames to PDF..."
+        },
+        "step3": "Ini akan menghasilkan satu file PDF dengan setiap frame sebagai halaman terpisah.",
+        "step4": "Unggah file PDF yang terkonsolidasi tersebut di bawah ini."
+    },
+    "uploader": {
+        "title": "Unggah PDF Figma",
+        "description": "Pilih file PDF yang diekspor dari Figma untuk memulai analisis.",
+        "button": {
+            "choose": "Pilih File PDF",
+            "analyzing": "Menganalisis...",
+            "analyze": "Analisis Sekarang"
+        }
+    },
+    "error": {
+        "selectFile": "Silakan pilih file PDF terlebih dahulu.",
+        "unknown": "Terjadi kesalahan yang tidak diketahui selama analisis. Silakan periksa konsol untuk detail."
+    },
+    "sidebar": {
+        "title": "Bagian Analisis",
+        "placeholder": "Hasil akan muncul di sini."
+    },
+    "loader": {
+        "message1": "Menganalisis struktur desain...",
+        "message2": "Mengidentifikasi layar dan komponen utama...",
+        "message3": "Merancang entitas data dan relasinya...",
+        "message4": "Membangun architecture canvas...",
+        "message5": "Menyelaraskan dengan praktik terbaik OutSystems...",
+        "subtitle": "Proses ini mungkin memerlukan beberapa saat."
+    },
+    "results": {
+        "title": "Hasil Analisis",
+        "exportPdf": "Ekspor ke PDF",
+        "bizSummary": {
+            "title": "Ringkasan Bisnis"
+        },
+        "architecture": {
+            "title": "Architecture Canvas"
+        },
+        "erd": {
+            "title": "Diagram ERD",
+            "description": "Klik dan seret tabel untuk mengatur diagram. Gunakan kontrol untuk zoom dan masuk ke layar penuh."
+        },
+        "entities": {
+            "title": "Entitas"
+        },
+        "staticEntities": {
+            "title": "Entitas Statis"
+        },
+         "async": {
+            "title": "Proses Asinkron",
+            "timers": "Timer",
+            "bpt": "Proses BPT",
+            "schedule": "Jadwal",
+            "trigger": "Pemicu",
+            "steps": "Langkah-langkah"
+        },
+        "thirdParty": {
+            "title": "Rekomendasi Pihak Ketiga",
+            "useCase": "Kasus Penggunaan"
+        },
+        "api": {
+            "title": "API Endpoints"
+        },
+        "roles": {
+            "title": "Peran & Izin"
+        },
+        "pages": {
+            "title": "Halaman",
+            "role": "Peran Utama"
+        },
+        "siteProperties": {
+            "title": "Properti Situs",
+            "dataType": "Tipe Data",
+            "defaultValue": "Nilai Default"
+        }
+    },
+    "erdControls": {
+        "zoomIn": "Perbesar",
+        "zoomOut": "Perkecil",
+        "reset": "Reset Tampilan",
+        "fullscreen": "Layar Penuh",
+        "exitFullscreen": "Keluar dari Layar Penuh",
+        "exportPng": "Ekspor sebagai PNG"
+    },
+    "footer": {
+        "text": "Didukung oleh Gemini API | Dirancang untuk Pengembang OutSystems",
+        "disclaimer": "AI bisa membuat kesalahan. Harap tinjau kembali hasilnya dengan saksama."
+    }
+}

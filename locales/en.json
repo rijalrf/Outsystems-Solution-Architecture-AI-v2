@@ -1,0 +1,162 @@
+
+{
+    "app": {
+        "title": "OutSystems Solution Architecture"
+    },
+    "header": {
+        "apiKey": "Manage API Key",
+        "docs": "Documentation"
+    },
+    "apiKeyModal": {
+        "title": "Enter Your Google Gemini API Key",
+        "description": "To use this application, you need to provide your own Google Gemini API key. You can get your key from Google AI Studio.",
+        "placeholder": "Paste your API key here",
+        "save": "Save Key",
+        "error": "A valid API key is required to perform an analysis."
+    },
+    "docsPage": {
+        "title": "Documentation",
+        "backButton": "Back to App",
+        "overview": {
+            "title": "Overview",
+            "p1": "This is a web-based tool designed to accelerate the application design and architecture phase for OutSystems developers. By uploading a multi-page PDF exported from a design tool like Figma, this application uses the Google Gemini API to analyze the visual and textual content and generate a comprehensive solution architecture blueprint."
+        },
+        "howToUse": {
+            "title": "How to Use",
+            "figma": {
+                "title": "1. Exporting from Figma",
+                "p1": "For the best analysis results, you must export your design from Figma as a single, multi-page PDF file.",
+                "step1": "In Figma, select all the frames you want to include in the analysis.",
+                "step2": "Go to the main menu: File > Export frames to PDF...",
+                "step3": "This will generate a single PDF file where each frame is a separate page.",
+                "step4": "Save this consolidated PDF file to your computer."
+            },
+            "apiKey": {
+                "title": "2. Setting Up Your API Key",
+                "p1": "The application requires a Google Gemini API key to function. When you first open the application, a pop-up will appear asking for your API key. Paste your key into the input field and click \"Save\". The key will be stored in your browser's local storage for future visits. You can update your key at any time by clicking the key icon in the header."
+            },
+            "analyze": {
+                "title": "3. Analyzing Your Design",
+                "step1": "Click the \"Choose PDF File\" button and select the PDF you exported from Figma.",
+                "step2": "Click the \"Analyze Now\" button.",
+                "step3": "Wait for the analysis to complete. The full architecture blueprint will be displayed."
+            }
+        },
+        "features": {
+            "title": "Features & Analysis Sections",
+            "p1": "The AI generates a detailed report broken down into the following sections:",
+            "bizSummary": "A high-level summary of the application's purpose.",
+            "architecture": "Categorizes modules into the OutSystems 3-Layer Canvas (End-User, Core, Foundation).",
+            "erd": "An interactive, visual diagram of your data model.",
+            "entities": "A detailed table view of all data entities and their attributes.",
+            "staticEntities": "Lookup data or enumerations, like order statuses or user types.",
+            "async": "Recommendations for background processes (Timers and BPT) if needed.",
+            "thirdParty": "Suggestions for external services like payment gateways or cloud storage.",
+            "api": "A list of proposed REST API endpoints for your application.",
+            "roles": "User roles for managing permissions.",
+            "pages": "A list of all identified screens or pages.",
+            "siteProperties": "Global, configurable variables for your application.",
+            "export": "The entire report can be exported as a professionally formatted PDF, and the ERD can be exported as a PNG."
+        }
+    },
+    "docs": {
+        "title": "How to Use",
+        "description": "For the best analysis results, please export your design from Figma as a single, multi-page PDF file.",
+        "step1": "In Figma, select all the frames you want to include in the analysis.",
+        "step2": {
+            "text": "Go to the main menu:",
+            "command": "File > Export frames to PDF..."
+        },
+        "step3": "This will generate a single PDF file with each frame as a separate page.",
+        "step4": "Upload that consolidated PDF file below."
+    },
+    "uploader": {
+        "title": "Upload Figma PDF",
+        "description": "Select a PDF file exported from Figma to begin the analysis.",
+        "button": {
+            "choose": "Choose PDF File",
+            "analyzing": "Analyzing...",
+            "analyze": "Analyze Now"
+        }
+    },
+    "error": {
+        "selectFile": "Please select a PDF file first.",
+        "unknown": "An unknown error occurred during analysis. Please check the console for details."
+    },
+    "sidebar": {
+        "title": "Analysis Sections",
+        "placeholder": "Results will appear here."
+    },
+    "loader": {
+        "message1": "Analyzing design structure...",
+        "message2": "Identifying key screens and components...",
+        "message3": "Designing data entities and relationships...",
+        "message4": "Constructing architecture canvas...",
+        "message5": "Aligning with OutSystems best practices...",
+        "subtitle": "This may take a moment."
+    },
+    "results": {
+        "title": "Analysis Results",
+        "exportPdf": "Export to PDF",
+        "bizSummary": {
+            "title": "Business Summary"
+        },
+        "architecture": {
+            "title": "Architecture Canvas"
+        },
+        "erd": {
+            "title": "ERD Diagram",
+            "description": "Click and drag tables to organize the diagram. Use controls to zoom and enter fullscreen."
+        },
+        "entities": {
+            "title": "Entities"
+        },
+        "staticEntities": {
+            "title": "Static Entities"
+        },
+        "async": {
+            "title": "Asynchronous Processes",
+            "timers": "Timers",
+            "bpt": "BPT Processes",
+            "schedule": "Schedule",
+            "trigger": "Trigger",
+            "steps": "Steps"
+        },
+        "thirdParty": {
+            "title": "Third-Party Recommendations",
+            "useCase": "Use Case"
+        },
+        "api": {
+            "title": "API Endpoints",
+            "method": "Method",
+            "path": "Path",
+            "parameters": "Parameters",
+            "requestExample": "Request Example",
+            "responseExample": "Response Example"
+        },
+        "roles": {
+            "title": "Roles & Permissions"
+        },
+        "pages": {
+            "title": "Pages",
+            "role": "Primary Role"
+        },
+        "siteProperties": {
+            "title": "Site Properties",
+            "dataType": "Data Type",
+            "defaultValue": "Default Value"
+        }
+    },
+    "erdControls": {
+        "zoomIn": "Zoom In",
+        "zoomOut": "Zoom Out",
+        "reset": "Reset View",
+        "fullscreen": "Fullscreen",
+        "exitFullscreen": "Exit Fullscreen",
+        "exportPng": "Export as PNG"
+    },
+    "footer": {
+        "text": "Powered by Gemini API | Designed for OutSystems Developers",
+        "disclaimer": "AI can make mistakes. Please review the results carefully."
+    }
+}

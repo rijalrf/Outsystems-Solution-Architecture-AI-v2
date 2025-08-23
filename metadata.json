@@ -1,0 +1,5 @@
+{
+  "name": "OutSystems Design Analyzer",
+  "description": "An application to analyze Figma design PDFs and extract key components like ERD, endpoints, roles, and pages, structured for OutSystems development.",
+  "requestFramePermissions": []
+}
