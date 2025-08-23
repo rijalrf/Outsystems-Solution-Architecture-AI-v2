@@ -1,4 +1,5 @@
 
+
 import jspdf from 'jspdf';
 import html2canvas from 'html2canvas';
 import type { AnalysisResult } from '../types';
@@ -231,14 +232,14 @@ export const generatePdfReport = async (result: AnalysisResult, erdElement: HTML
          });
     }
 
-    if (result.pages?.length > 0) {
-        addSectionHeader("Pages");
-         result.pages.forEach(page => {
+    if (result.screens?.length > 0) {
+        addSectionHeader("Screens");
+         result.screens.forEach(screen => {
             addPageIfNeeded(10);
             doc.setFontSize(FONT_SIZES.H3); doc.setTextColor(51, 65, 85);
-            doc.text(page.name, PAGE_MARGIN, cursorY); cursorY += 5;
-            addBodyText(page.description, 5);
-            addBodyText(`Primary Role: ${page.role}`, 5);
+            doc.text(screen.name, PAGE_MARGIN, cursorY); cursorY += 5;
+            addBodyText(screen.description, 5);
+            addBodyText(`Primary Role: ${screen.role}`, 5);
             cursorY += 5;
          });
     }

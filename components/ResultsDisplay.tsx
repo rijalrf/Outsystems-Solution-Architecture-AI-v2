@@ -1,6 +1,6 @@
 
 import React, { useRef, useState } from 'react';
-import type { AnalysisResult, ConsumedRestApi, Role, Page, StaticEntity, SiteProperty, ThirdPartyServiceRecommendation, Timer, BPTProcess, ServiceAction, PluginRecommendation } from '../types';
+import type { AnalysisResult, ConsumedRestApi, Role, Screen, StaticEntity, SiteProperty, ThirdPartyServiceRecommendation, Timer, BPTProcess, ServiceAction, PluginRecommendation } from '../types';
 import { ERDCanvas } from './ERDCanvas';
 import { EntitiesList } from './EntitiesList';
 import { ArchitectureCanvasDisplay } from './ArchitectureCanvasDisplay';
@@ -31,7 +31,7 @@ const ApiIcon = () => (
 const UserIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M15 21v-1a6 6 0 00-5.173-5.91" /></svg>
 );
-const PageIcon = () => (
+const ScreenIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
 );
 const SettingsIcon = () => (
@@ -126,8 +126,9 @@ export const ResultsDisplay: React.FC<{ result: AnalysisResult }> = ({ result })
   const entitiesCount = result.entities?.length || 0;
   const staticEntitiesCount = result.staticEntities?.length || 0;
   const consumedRestApisCount = result.consumedRestApis?.length || 0;
-  const pagesCount = result.pages?.length || 0;
-  const totalAo = entitiesCount + staticEntitiesCount + pagesCount + consumedRestApisCount;
+  const screensCount = result.screens?.length || 0;
+  const totalAo = entitiesCount + staticEntitiesCount + screensCount + consumedRestApisCount;
+
 
   const handleExportPdf = async () => {
     if (!result) return;
@@ -195,13 +196,13 @@ export const ResultsDisplay: React.FC<{ result: AnalysisResult }> = ({ result })
                         <p className="text-sm font-semibold text-slate-500 dark:text-slate-400">Static Entities</p>
                         <p className="text-xl font-bold text-slate-800 dark:text-slate-200">{staticEntitiesCount}</p>
                     </div>
+                     <div className="p-3 bg-slate-100 dark:bg-slate-700 rounded-lg">
+                        <p className="text-sm font-semibold text-slate-500 dark:text-slate-400">Screens</p>
+                        <p className="text-xl font-bold text-slate-800 dark:text-slate-200">{screensCount}</p>
+                    </div>
                     <div className="p-3 bg-slate-100 dark:bg-slate-700 rounded-lg">
                         <p className="text-sm font-semibold text-slate-500 dark:text-slate-400">Consumed REST</p>
                         <p className="text-xl font-bold text-slate-800 dark:text-slate-200">{consumedRestApisCount}</p>
-                    </div>
-                    <div className="p-3 bg-slate-100 dark:bg-slate-700 rounded-lg">
-                        <p className="text-sm font-semibold text-slate-500 dark:text-slate-400">Pages</p>
-                        <p className="text-xl font-bold text-slate-800 dark:text-slate-200">{pagesCount}</p>
                     </div>
                 </div>
                 <p className="text-xs text-slate-400 dark:text-slate-500 mt-4 text-center">This is an estimate based on the identified components. See OutSystems documentation for official AO counting rules.</p>
@@ -227,13 +228,13 @@ export const ResultsDisplay: React.FC<{ result: AnalysisResult }> = ({ result })
         )}
         
         {entitiesCount > 0 && (
-            <ResultCard id="entities" title={`Entities (${entitiesCount})`} icon={<TableIcon />}>
+            <ResultCard id="entities" title="Entities" icon={<TableIcon />}>
             <EntitiesList entities={result.entities} />
             </ResultCard>
         )}
 
         {staticEntitiesCount > 0 && (
-            <ResultCard id="static-entities" title={`Static Entities (${staticEntitiesCount})`} icon={<StaticEntityIcon />}>
+            <ResultCard id="static-entities" title="Static Entities" icon={<StaticEntityIcon />}>
                 {result.staticEntities.map((entity: StaticEntity, index: number) => (
                     <SectionItem key={index} title={entity.name}>
                         <p className="text-sm text-slate-500 dark:text-slate-400 italic mt-1 mb-3">{entity.description}</p>
@@ -356,7 +357,7 @@ export const ResultsDisplay: React.FC<{ result: AnalysisResult }> = ({ result })
         )}
 
         {consumedRestApisCount > 0 && (
-            <ResultCard id="consumed-rest-apis" title={`Consumed REST APIs (${consumedRestApisCount})`} icon={<ApiIcon />}>
+            <ResultCard id="consumed-rest-apis" title="Consumed REST APIs" icon={<ApiIcon />}>
                 {result.consumedRestApis.map((api: ConsumedRestApi, index: number) => (
                     <SectionItem key={index} title={api.name}>
                         <p className="text-sm text-slate-500 dark:text-slate-400 italic mt-1 mb-2">{api.description}</p>
@@ -390,13 +391,13 @@ export const ResultsDisplay: React.FC<{ result: AnalysisResult }> = ({ result })
             </ResultCard>
         )}
 
-        {pagesCount > 0 && (
-            <ResultCard id="pages" title={`Pages (${pagesCount})`} icon={<PageIcon />}>
+        {screensCount > 0 && (
+            <ResultCard id="screens" title="Screens" icon={<ScreenIcon />}>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {result.pages.map((page: Page, index: number) => (
-                        <SectionItem key={index} title={page.name} className="flex flex-col">
-                            <p className="text-sm text-slate-500 dark:text-slate-400 italic mt-1 mb-2 flex-grow">{page.description}</p>
-                            <p className="text-sm text-slate-600 dark:text-slate-300"><span className="font-semibold">Primary Role:</span> {page.role}</p>
+                    {result.screens.map((screen: Screen, index: number) => (
+                        <SectionItem key={index} title={screen.name} className="flex flex-col">
+                            <p className="text-sm text-slate-500 dark:text-slate-400 italic mt-1 mb-2 flex-grow">{screen.description}</p>
+                            <p className="text-sm text-slate-600 dark:text-slate-300"><span className="font-semibold">Primary Role:</span> {screen.role}</p>
                         </SectionItem>
                     ))}
                 </div>

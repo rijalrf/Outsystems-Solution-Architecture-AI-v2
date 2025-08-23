@@ -233,7 +233,7 @@ const getResponseSchema = () => ({
         },
       },
     },
-    pages: {
+    screens: {
       type: Type.ARRAY,
       description: "List of application screens or pages visible in the design.",
       items: {
@@ -242,15 +242,15 @@ const getResponseSchema = () => ({
         properties: {
           name: {
             type: Type.STRING,
-            description: "The name of the page or screen, e.g., 'Login Screen', 'Dashboard'."
+            description: "The name of the screen, e.g., 'Login Screen', 'Dashboard'."
           },
           description: {
             type: Type.STRING,
-            description: "A brief description of the page's purpose and functionality."
+            description: "A brief description of the screen's purpose and functionality."
           },
           role: {
             type: Type.STRING,
-            description: "The primary user role that can access this page, e.g., 'Administrator', 'Public'."
+            description: "The primary user role that can access this screen, e.g., 'Administrator', 'Public'."
           }
         },
       },
@@ -284,7 +284,7 @@ const getResponseSchema = () => ({
     },
     pluginRecommendations: {
       type: Type.ARRAY,
-      description: "OPTIONAL: List of recommended OutSystems Forge plugins. Only include if the design implies a need that a common Forge component can solve (e.g., generating PDFs, advanced charts, special UI interactions).",
+      description: "OPTIONAL: List of recommended OutSystems Forge plugins based on the design. Only include if a common Forge component can solve a need.",
       items: {
           type: Type.OBJECT,
           required: ["name", "description"],
@@ -295,7 +295,7 @@ const getResponseSchema = () => ({
       }
     },
   },
-  required: ["businessSummary", "architecture", "entities", "relationships", "staticEntities", "serviceActions", "roles", "pages", "siteProperties"],
+  required: ["businessSummary", "architecture", "entities", "relationships", "staticEntities", "serviceActions", "roles", "screens", "siteProperties"],
 });
 
 export const analyzePdfForOutsystems = async (pdfFile: File, apiKey: string): Promise<AnalysisResult> => {
@@ -313,7 +313,7 @@ export const analyzePdfForOutsystems = async (pdfFile: File, apiKey: string): Pr
       - Service Actions: https://success.outsystems.com/documentation/outsystems_developer_cloud/app_architecture/service_actions/
       - Consuming REST APIs: https://success.outsystems.com/documentation/11/integration_with_external_systems/rest/consume_rest_apis/
       - Application Objects (AO): https://success.outsystems.com/support/licensing/application_objects/
-      - OutSystems Forge: https://www.outsystems.com/forge/
+      - OutSystems Forge & Forums: https://www.outsystems.com/forge/, https://www.outsystems.com/forums/
 
       Generate a response that precisely follows the provided JSON schema.
 
@@ -329,10 +329,10 @@ export const analyzePdfForOutsystems = async (pdfFile: File, apiKey: string): Pr
       - **Roles & Permissions**: Define roles based on the Principle of Least Privilege.
       - **Service Actions**: Define reusable, server-side business logic as Service Actions. Their names MUST start with a verb (e.g., 'GetUserDetails', 'SubmitOrder'). These are not exposed as REST endpoints but are callable from other modules to enforce business rules consistently. **They do not count as Application Objects.**
       - **Consumed REST APIs (OPTIONAL)**: Identify any necessary integrations with external REST APIs (e.g., calling Google Maps, Stripe for payments). List these as Consumed REST APIs, as **they count towards Application Objects.** Only include this section if external integrations are clearly needed.
-      - **Pages**: List all user-facing screens.
+      - **Screens**: List all user-facing screens.
       - **Site Properties**: Recommend site properties for configurability.
       - **Third-Party Recommendations**: Suggest integrations where appropriate.
-      - **Plugin Recommendations (OPTIONAL)**: Based on the application's needs, recommend relevant and popular plugins from the OutSystems Forge. For example, if the design shows PDF reports, recommend 'Ultimate PDF'. For each recommendation, provide its name and a description of why it's useful.
+      - **Plugin Recommendations (OPTIONAL)**: Based on the application's needs, recommend relevant and popular plugins from the OutSystems Forge. For each recommendation, provide its official name and a description of why it's useful. Use the provided Forge and Forum links to ensure the plugin names are accurate and relevant.
     `
   };
 

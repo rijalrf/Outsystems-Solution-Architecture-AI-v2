@@ -1,4 +1,5 @@
 
+
 export interface Attribute {
   name: string;
   dataType: string;
@@ -41,7 +42,7 @@ export interface Role {
   description: string;
 }
 
-export interface Page {
+export interface Screen {
   name: string;
   description: string;
   role: string;
@@ -113,7 +114,7 @@ export interface AnalysisResult {
   roles: Role[];
   serviceActions: ServiceAction[];
   consumedRestApis?: ConsumedRestApi[];
-  pages: Page[];
+  screens: Screen[];
   siteProperties: SiteProperty[];
   thirdPartyRecommendations?: ThirdPartyServiceRecommendation[];
   asynchronousProcesses?: AsynchronousProcesses;

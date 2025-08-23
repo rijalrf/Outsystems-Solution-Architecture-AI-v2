@@ -1,3 +1,4 @@
+
 import React from 'react';
 
 interface DocsSectionProps {
@@ -59,17 +60,20 @@ export const DocumentationPage: React.FC<{ onBack: () => void }> = ({ onBack }) 
                 <DocsSection title="Features & Analysis Sections">
                     <p>The AI generates a detailed report broken down into the following sections:</p>
                     <ul className="list-disc space-y-2 mt-2">
+                        <FeatureItem title="AI Chat Assistant">An interactive chat assistant that can answer questions about the analysis results, with the ability to search for relevant OutSystems documentation.</FeatureItem>
                         <FeatureItem title="Business Summary">A high-level summary of the application's purpose.</FeatureItem>
+                        <FeatureItem title="Application Object (AO) Estimation">Provides an estimated AO count based on the generated components to help with licensing considerations.</FeatureItem>
                         <FeatureItem title="Architecture Canvas">Categorizes modules into the OutSystems 3-Layer Canvas (End-User, Core, Foundation).</FeatureItem>
                         <FeatureItem title="ERD Diagram">An interactive, visual diagram of your data model.</FeatureItem>
                         <FeatureItem title="Entities">A detailed table view of all data entities and their attributes.</FeatureItem>
                         <FeatureItem title="Static Entities">Lookup data or enumerations, like order statuses or user types.</FeatureItem>
                         <FeatureItem title="Asynchronous Processes">Recommendations for background processes (Timers and BPT) if needed.</FeatureItem>
+                        <FeatureItem title="Plugin Recommendations">Suggests relevant OutSystems Forge plugins based on the application's needs.</FeatureItem>
                         <FeatureItem title="Third-Party Recommendations">Suggestions for external services like payment gateways or cloud storage.</FeatureItem>
                         <FeatureItem title="Service Actions">Reusable, server-side business logic that is not exposed as REST endpoints and does not count towards Application Objects (AO).</FeatureItem>
                         <FeatureItem title="Consumed REST APIs">Identifies necessary integrations with external REST APIs (e.g., Google Maps, Stripe), which count towards Application Objects (AO).</FeatureItem>
                         <FeatureItem title="Roles & Permissions">User roles for managing permissions.</FeatureItem>
-                        <FeatureItem title="Pages">A list of all identified screens or pages.</FeatureItem>
+                        <FeatureItem title="Screens">A list of all identified screens.</FeatureItem>
                         <FeatureItem title="Site Properties">Global, configurable variables for your application.</FeatureItem>
                         <FeatureItem title="Exporting">The entire report can be exported as a professionally formatted PDF, and the ERD can be exported as a PNG.</FeatureItem>
                     </ul>

@@ -9,6 +9,7 @@ The generated blueprint is tailored to OutSystems best practices, providing a st
 ## ✨ Features
 
 - **AI-Powered Analysis**: Leverages Google Gemini to interpret design files and extract architectural components.
+- **AI Chat Assistant**: An interactive chat assistant that can answer questions about the generated analysis results, with the ability to search for relevant OutSystems documentation and community posts.
 - **Business Summary**: Generates a high-level summary of the application's purpose.
 - **OutSystems Architecture Canvas**: Automatically categorizes proposed modules into the 3-Layer Canvas (End-User, Core, Foundation) with correct naming conventions.
 - **Interactive ERD Diagram**: Visualizes the data model with draggable entities and auto-generated relationships. Can be exported to PNG.
@@ -18,10 +19,11 @@ The generated blueprint is tailored to OutSystems best practices, providing a st
   - Roles & Permissions
   - Service Actions (internal, non-AO logic)
   - Consumed REST APIs (external integrations that count as AO)
-  - Pages/Screens
+  - Screens
   - Site Properties
-- **Application Object (AO) Estimation**: Provides an estimated AO count based on the generated components to help with licensing considerations.
+- **Application Object (AO) Estimation**: Provides an estimated AO count based on the generated components (Entities, Static Entities, Screens, and Consumed REST APIs) to help with licensing considerations.
 - **Asynchronous Process Recommendations**: Suggests Timers and BPT processes for background tasks and workflows if detected in the design.
+- **Plugin Recommendations**: Suggests relevant OutSystems Forge plugins based on the application's needs.
 - **Third-Party Service Recommendations**: Suggests external services (like Stripe for payments or AWS S3 for storage) based on application needs.
 - **Export to PDF**: Compiles the entire analysis into a professionally formatted PDF report.
 - **Dark Mode**: A sleek dark mode for comfortable viewing.

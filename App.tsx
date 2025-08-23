@@ -15,7 +15,6 @@ import { Tooltip } from './components/Tooltip';
 import { DocumentationPage } from './components/DocumentationPage';
 import { ApiKeyModal } from './components/ApiKeyModal';
 import { ChatAssistant } from './components/ChatAssistant';
-import { sampleAnalysisResult } from './data/sampleData';
 
 type View = 'app' | 'docs';
 
@@ -96,14 +95,6 @@ const App: React.FC = () => {
     }
   }, [file, apiKey]);
 
-  const handleLoadSampleData = () => {
-    setError(null);
-    setFile(null);
-    setAnalysisResult(sampleAnalysisResult);
-    setChatMessages([]);
-    setIsChatOpen(false);
-  };
-
   const handleSendMessage = async (message: string) => {
     if (!message.trim() || !analysisResult || !apiKey) return;
 
@@ -115,7 +106,7 @@ const App: React.FC = () => {
         const ai = new GoogleGenAI({ apiKey });
         const systemInstruction = `You are a specialized OutSystems architecture assistant.
 1. Your primary role is to answer questions strictly based on the provided JSON analysis data.
-2. If a question is relevant to the analysis or general OutSystems development practices but cannot be answered from the JSON data, you may use a web search. When searching, prioritize sources in this order: official OutSystems documentation, relevant OutSystems forums, and OutSystems community content. You MUST cite your sources.
+2. If a question is relevant to the analysis or general OutSystems development practices but cannot be answered from the JSON data, you may use a web search. When searching, prioritize sources in this order: official OutSystems documentation, the OutSystems community forums (https://www.outsystems.com/forums/), and other relevant OutSystems community content. You MUST cite your sources.
 3. If a question is completely irrelevant to the analysis or OutSystems (e.g., 'Who is the president of Indonesia?'), you MUST refuse to answer it directly. Instead, respond by saying something like: 'I could not find information about "${message}" in the analysis results.' Do not search the web for irrelevant topics.
 
 Here is the analysis data:
@@ -201,17 +192,11 @@ ${JSON.stringify(analysisResult, null, 2)}`;
           <main className="flex-grow p-4 md:p-8">
               <div className="max-w-4xl mx-auto">
                   <div className="mt-8 bg-white dark:bg-slate-800 p-6 md:p-8 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700">
-                      <div className="flex items-center justify-between gap-2 mb-2">
+                      <div className="flex items-center justify-start gap-2 mb-2">
                         <div className="flex items-center gap-2">
                           <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">Upload Figma PDF</h2>
                           <Tooltip content={tooltipContent} />
                         </div>
-                        <button
-                          onClick={handleLoadSampleData}
-                          className="px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors"
-                        >
-                            Load Sample Data
-                        </button>
                       </div>
                       <p className="text-slate-500 dark:text-slate-400 mb-6">Select a PDF file exported from Figma to begin the analysis.</p>
                       <FileUploader 

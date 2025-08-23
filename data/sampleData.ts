@@ -1,4 +1,5 @@
 
+
 import type { AnalysisResult } from '../types';
 
 export const sampleAnalysisResult: AnalysisResult = {
@@ -150,8 +151,8 @@ export const sampleAnalysisResult: AnalysisResult = {
     { name: "Administrator", description: "Can manage products, orders, and user accounts." },
     { name: "RegisteredUser", description: "Can browse products, place orders, and view their order history." }
   ],
-  pages: [
-    { name: "Home Page", description: "Displays featured products and categories.", role: "Public" },
+  screens: [
+    { name: "Home Screen", description: "Displays featured products and categories.", role: "Public" },
     { name: "Product Listing", description: "Shows a grid of all available products with filters.", role: "Public" },
     { name: "Product Detail", description: "Shows details for a single product and allows customization.", role: "RegisteredUser" },
     { name: "Shopping Cart", description: "Displays items added to the cart and proceeds to checkout.", role: "RegisteredUser" },

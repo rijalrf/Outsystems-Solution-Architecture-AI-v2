@@ -1,4 +1,5 @@
 
+
 import React from 'react';
 import type { AnalysisResult } from '../types';
 
@@ -22,8 +23,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ result }) => {
     const entitiesCount = result?.entities?.length || 0;
     const staticEntitiesCount = result?.staticEntities?.length || 0;
     const consumedRestApisCount = result?.consumedRestApis?.length || 0;
-    const pagesCount = result?.pages?.length || 0;
-    const totalAo = entitiesCount + staticEntitiesCount + pagesCount + consumedRestApisCount;
+    const screensCount = result?.screens?.length || 0;
+    const totalAo = entitiesCount + staticEntitiesCount + screensCount + consumedRestApisCount;
 
     return (
         <aside className="sticky top-0 h-screen w-64 bg-slate-100/50 dark:bg-slate-800/50 border-r border-slate-200 dark:border-slate-700 p-4 hidden lg:block">
@@ -44,15 +45,15 @@ export const Sidebar: React.FC<SidebarProps> = ({ result }) => {
                             {totalAo > 0 && <NavLink href="#ao-estimate">AO Estimate</NavLink>}
                             {result.architecture && <NavLink href="#architecture">Architecture Canvas</NavLink>}
                             {entitiesCount > 0 && <NavLink href="#erd-diagram">ERD Diagram</NavLink>}
-                            {entitiesCount > 0 && <NavLink href="#entities">Entities ({entitiesCount})</NavLink>}
-                            {staticEntitiesCount > 0 && <NavLink href="#static-entities">Static Entities ({staticEntitiesCount})</NavLink>}
+                            {entitiesCount > 0 && <NavLink href="#entities">Entities</NavLink>}
+                            {staticEntitiesCount > 0 && <NavLink href="#static-entities">Static Entities</NavLink>}
                             {hasAsyncProcesses && <NavLink href="#asynchronous-processes">Asynchronous Processes</NavLink>}
                             {result.pluginRecommendations?.length > 0 && <NavLink href="#plugin-recommendations">Plugin Recommendations</NavLink>}
                             {result.thirdPartyRecommendations?.length > 0 && <NavLink href="#third-party-recommendations">Third-Party Recommendations</NavLink>}
                             {result.serviceActions?.length > 0 && <NavLink href="#service-actions">Service Actions</NavLink>}
-                            {consumedRestApisCount > 0 && <NavLink href="#consumed-rest-apis">Consumed REST APIs ({consumedRestApisCount})</NavLink>}
+                            {consumedRestApisCount > 0 && <NavLink href="#consumed-rest-apis">Consumed REST APIs</NavLink>}
                             {result.roles?.length > 0 && <NavLink href="#roles">Roles & Permissions</NavLink>}
-                            {pagesCount > 0 && <NavLink href="#pages">Pages ({pagesCount})</NavLink>}
+                            {screensCount > 0 && <NavLink href="#screens">Screens</NavLink>}
                             {result.siteProperties?.length > 0 && <NavLink href="#site-properties">Site Properties</NavLink>}
                         </>
                    ) : (
