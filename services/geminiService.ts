@@ -3,6 +3,12 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import type { AnalysisResult } from '../types';
 
+// New internal type for Gemini response which includes validation fields
+type GeminiApiResponse = AnalysisResult & {
+    isDesignFile: boolean;
+    validationError: string | null;
+};
+
 const fileToGenerativePart = async (file: File) => {
   const base64EncodedDataPromise = new Promise<string>((resolve) => {
     const reader = new FileReader();
@@ -17,6 +23,14 @@ const fileToGenerativePart = async (file: File) => {
 const getResponseSchema = () => ({
   type: Type.OBJECT,
   properties: {
+    isDesignFile: {
+        type: Type.BOOLEAN,
+        description: "Set to true if the uploaded file appears to be a software design, UI/UX wireframe, or mockup. Set to false if it seems to be an irrelevant document like a resume, article, or random text file."
+    },
+    validationError: {
+        type: Type.STRING,
+        description: "If 'isDesignFile' is false, provide a brief, user-friendly message explaining why the file is not suitable for analysis (e.g., 'The document does not appear to contain software designs or wireframes.'). If 'isDesignFile' is true, this MUST be null."
+    },
     businessSummary: {
         type: Type.STRING,
         description: "A brief, high-level business summary of the application's purpose and main goals."
@@ -295,7 +309,7 @@ const getResponseSchema = () => ({
       }
     },
   },
-  required: ["businessSummary", "architecture", "entities", "relationships", "staticEntities", "serviceActions", "roles", "screens", "siteProperties"],
+  required: ["isDesignFile", "validationError"],
 });
 
 export const analyzePdfForOutsystems = async (pdfFile: File, apiKey: string): Promise<AnalysisResult> => {
@@ -306,6 +320,11 @@ export const analyzePdfForOutsystems = async (pdfFile: File, apiKey: string): Pr
   const textPart = {
     text: `
       You are an expert OutSystems Solution Architect. Your task is to analyze the provided Figma design PDF and generate a comprehensive solution architecture blueprint.
+
+      **IMPORTANT VALIDATION STEP:**
+      First, you MUST determine if the uploaded document is a valid software design file (like a wireframe, mockup, or UI design from Figma).
+      - If the file IS a valid design, you MUST set "isDesignFile" to true and "validationError" to null. Then, proceed to generate the complete architecture analysis as requested below.
+      - If the file is NOT a valid design (e.g., it's a resume, a text document, a random report), you MUST set "isDesignFile" to false and provide a user-friendly error message in "validationError". In this case, you MUST NOT generate any other architectural fields (like businessSummary, entities, etc.).
 
       Your analysis MUST strictly adhere to the principles, best practices, and patterns outlined in the official OutSystems documentation, which serves as your primary knowledge base. Refer to these sources:
       - Architecture Canvas: https://success.outsystems.com/documentation/11/app_architecture/designing_the_architecture_of_your_outsystems_applications/the_architecture_canvas/
@@ -350,7 +369,13 @@ export const analyzePdfForOutsystems = async (pdfFile: File, apiKey: string): Pr
     if (!jsonText) {
         throw new Error("The AI model returned an empty response. Please try again.");
     }
-    const rawResult = JSON.parse(jsonText);
+    const rawResult = JSON.parse(jsonText) as GeminiApiResponse;
+
+    if (rawResult.isDesignFile === false) {
+        const infoMessage = rawResult.validationError || "The uploaded PDF does not appear to be a valid software design document. Please upload a PDF exported from Figma.";
+        return { validationMessage: infoMessage };
+    }
+
 
     // Post-process static entities to parse record strings into objects
     if (rawResult.staticEntities && Array.isArray(rawResult.staticEntities)) {
@@ -376,6 +401,9 @@ export const analyzePdfForOutsystems = async (pdfFile: File, apiKey: string): Pr
 
   } catch (error) {
     console.error("Error calling Gemini API:", error);
+    if (error instanceof Error && error.message.includes('JSON')) {
+       throw new Error(`Failed to analyze the PDF. The AI model returned an invalid format. Please try again or check the file content.`);
+    }
     const errorMessage = error instanceof Error ? error.message : JSON.stringify(error);
     throw new Error(`Failed to analyze the PDF. The AI model could not process the request. Details: ${errorMessage}`);
   }

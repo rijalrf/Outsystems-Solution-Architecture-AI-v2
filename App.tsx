@@ -1,5 +1,6 @@
 
 
+
 import React, { useState, useCallback, useEffect } from 'react';
 import { GoogleGenAI } from "@google/genai";
 import { Header } from './components/Header';
@@ -10,6 +11,7 @@ import { analyzePdfForOutsystems } from './services/geminiService';
 import type { AnalysisResult, ChatMessage } from './types';
 import { Welcome } from './components/Welcome';
 import { ErrorDisplay } from './components/ErrorDisplay';
+import { InfoDisplay } from './components/InfoDisplay';
 import { Sidebar } from './components/Sidebar';
 import { Tooltip } from './components/Tooltip';
 import { DocumentationPage } from './components/DocumentationPage';
@@ -23,6 +25,7 @@ const App: React.FC = () => {
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [infoMessage, setInfoMessage] = useState<string | null>(null);
   const [view, setView] = useState<View>('app');
   const [apiKey, setApiKey] = useState<string | null>(() => localStorage.getItem('gemini-api-key'));
   const [isApiKeyModalOpen, setIsApiKeyModalOpen] = useState<boolean>(!localStorage.getItem('gemini-api-key'));
@@ -57,6 +60,7 @@ const App: React.FC = () => {
     setFile(selectedFile);
     setAnalysisResult(null);
     setError(null);
+    setInfoMessage(null);
     setChatMessages([]);
     setIsChatOpen(false);
   };
@@ -80,13 +84,19 @@ const App: React.FC = () => {
     
     setIsLoading(true);
     setError(null);
+    setInfoMessage(null);
     setAnalysisResult(null);
     setChatMessages([]);
     setIsChatOpen(false);
 
     try {
       const result = await analyzePdfForOutsystems(file, apiKey);
-      setAnalysisResult(result);
+      if (result.validationMessage) {
+        setInfoMessage(result.validationMessage);
+        setAnalysisResult(null);
+      } else {
+        setAnalysisResult(result);
+      }
     } catch (err) {
       console.error(err);
       setError(err instanceof Error ? err.message : 'An unknown error occurred during analysis. Please check the console for details.');
@@ -208,10 +218,12 @@ ${JSON.stringify(analysisResult, null, 2)}`;
                   </div>
 
                   {error && <ErrorDisplay message={error} />}
+                  {infoMessage && <InfoDisplay message={infoMessage} />}
+
 
                   {isLoading && <Loader />}
                   
-                  {!isLoading && !analysisResult && !error && <Welcome />}
+                  {!isLoading && !analysisResult && !error && !infoMessage && <Welcome />}
                   
                   {analysisResult && <div id="analysis-results-container"><ResultsDisplay result={analysisResult} /></div>}
               </div>

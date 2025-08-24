@@ -106,16 +106,17 @@ export interface PluginRecommendation {
 }
 
 export interface AnalysisResult {
-  businessSummary: string;
+  validationMessage?: string;
+  businessSummary?: string;
   architecture?: Architecture;
-  entities: Entity[];
-  relationships: Relationship[];
-  staticEntities: StaticEntity[];
-  roles: Role[];
-  serviceActions: ServiceAction[];
+  entities?: Entity[];
+  relationships?: Relationship[];
+  staticEntities?: StaticEntity[];
+  roles?: Role[];
+  serviceActions?: ServiceAction[];
   consumedRestApis?: ConsumedRestApi[];
-  screens: Screen[];
-  siteProperties: SiteProperty[];
+  screens?: Screen[];
+  siteProperties?: SiteProperty[];
   thirdPartyRecommendations?: ThirdPartyServiceRecommendation[];
   asynchronousProcesses?: AsynchronousProcesses;
   pluginRecommendations?: PluginRecommendation[];
