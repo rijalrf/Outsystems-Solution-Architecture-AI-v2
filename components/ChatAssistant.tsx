@@ -102,13 +102,13 @@ export const ChatAssistant: React.FC<ChatAssistantProps> = ({ isOpen, onToggle, 
   };
 
   return (
-    <div className="fixed bottom-4 right-4 z-40 flex flex-col items-end">
+    <div className={`fixed bottom-4 right-4 z-40 flex flex-col items-end ${!isOpen && 'pointer-events-none'}`}>
       {/* Chat Window */}
       <div 
-        className={`transition-all duration-300 ease-in-out mb-4 ${isOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}`}
+        className={`transition-all duration-300 ease-in-out mb-4 ${isOpen ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-4'}`}
         style={{ transformOrigin: 'bottom right' }}
       >
-        <div className="w-[36rem] h-[48rem] bg-white dark:bg-slate-800 rounded-lg shadow-2xl flex flex-col border border-slate-200 dark:border-slate-700">
+        <div className="w-[24rem] h-[32rem] bg-white dark:bg-slate-800 rounded-lg shadow-2xl flex flex-col border border-slate-200 dark:border-slate-700">
           {/* Header */}
           <div className="flex justify-between items-center p-3 border-b border-slate-200 dark:border-slate-700 flex-shrink-0">
             <h3 className="font-bold text-slate-800 dark:text-slate-100">AI Assistant</h3>
@@ -160,7 +160,7 @@ export const ChatAssistant: React.FC<ChatAssistantProps> = ({ isOpen, onToggle, 
       {/* Toggle Button */}
       <button 
         onClick={onToggle} 
-        className="bg-red-600 text-white rounded-full p-4 shadow-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-slate-800 focus:ring-red-500 transition-transform duration-200 hover:scale-110"
+        className="bg-red-600 text-white rounded-full p-4 shadow-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-slate-800 focus:ring-red-500 transition-transform duration-200 hover:scale-110 pointer-events-auto"
         aria-label="Toggle chat assistant"
       >
         <ChatIcon />
